@@ -80,7 +80,7 @@ delete '/users/:id' do |id|
 end
 
 post 'sms' do
-  erb: :'sms/index'
+  erb :'sms/index'
   unless params['Body'] 
     halt 400, 'Missing "From" or "Body" in POST'
   end

@@ -4,6 +4,7 @@ ruby '2.0.0'
 gem 'sinatra'
 gem 'data_mapper'
 gem 'twilio-ruby'
+gem 'zendesk_api'
 
 group :development, :test do
   gem 'sqlite3'

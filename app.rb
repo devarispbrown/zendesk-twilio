@@ -80,8 +80,8 @@ delete '/users/:id' do |id|
 end
 
 post 'sms' do
-  $log.debug("Hit the SMS endpoint")
-  unless params['From'] and params['Body'] 
+  erb: :'sms/index'
+  unless params['Body'] 
     halt 400, 'Missing "From" or "Body" in POST'
   end
   $log.debug("Incoming SMS POST data: #{params.inspect}")

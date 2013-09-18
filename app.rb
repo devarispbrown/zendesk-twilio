@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'sinatra'
+require 'logger'
 require 'data_mapper'
+require 'json'
 
 $stdout.sync = true
 

@@ -7,7 +7,6 @@ gem 'twilio-ruby'
 group :development, :test do
   gem 'sqlite3'
   gem 'dm-sqlite-adapter'
-  gem 'dotenv-rails'
 end
 
 group :production do

@@ -1,8 +1,6 @@
 require 'rubygems'
 require 'sinatra'
 require 'data_mapper'
-require 'dotenv'
-Dotenv.load
 
 $stdout.sync = true
 

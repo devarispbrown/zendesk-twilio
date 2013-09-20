@@ -78,11 +78,11 @@ end
 
 post '/sms' do
   @users = User.all
-  unless params['Body'] 
-    halt 400, 'Missing "From" or "Body" in POST'
+  unless params['Body'] and params['Id'] and params['Priority'] and params['Email']
+    halt 400, 'Missing "Id", "Body", "Priority", or "Email" in POST'
   end
   $log.debug("Incoming SMS POST data: #{params.inspect}")
-  
+
   @account_sid = ENV['TWILIO_ACCOUNT_SID']
   @auth_token = ENV['TWILIO_AUTH_TOKEN']
 
@@ -91,7 +91,7 @@ post '/sms' do
     @client = Twilio::REST::Client.new(@account_sid, @auth_token)
 
     @account = @client.account
-    @message = @account.sms.messages.create({:from => ENV['TWILIO_FROM_NUMBER'], :to => 'user.phone_number', :body => params['Body']})
+    @message = @account.sms.messages.create({:from => ENV['TWILIO_FROM_NUMBER'], :to => 'user.phone_number', :body => "VIP User #{params['Email']} has this issue #{params['Body']}. Ticket number #{params['Id']} has a priority of #{params['Priority']}"})
     puts @message
   end
 end

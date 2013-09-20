@@ -7,10 +7,7 @@ require 'json'
 $stdout.sync = true
 
 $log = Logger.new(STDOUT)
-$log.level = Logger::ERROR
-if ENV['DEBUG']
-  $log.level = Logger::DEBUG
-end
+$log.level = Logger::DEBUG
 
 DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/dev.db")
 
@@ -80,19 +77,21 @@ delete '/users/:id' do |id|
 end
 
 post 'sms' do
-  erb :'sms/index'
+  @users = User.all
   unless params['Body'] 
     halt 400, 'Missing "From" or "Body" in POST'
   end
   $log.debug("Incoming SMS POST data: #{params.inspect}")
   
-  # @account_sid = ENV['TWILIO_ACCOUNT_SID']
-  # @auth_token = ENV['TWILIO_AUTH_TOKEN']
+  @account_sid = ENV['TWILIO_ACCOUNT_SID']
+  @auth_token = ENV['TWILIO_AUTH_TOKEN']
 
-  # # set up a client to talk to the Twilio REST API
-  # @client = Twilio::REST::Client.new(@account_sid, @auth_token)
+  # set up a client to talk to the Twilio REST API
+  @users.each do |user|
+    @client = Twilio::REST::Client.new(@account_sid, @auth_token)
 
-  # @account = @client.account
-  # @message = @account.sms.messages.create({:from => ENV['TWILIO_FROM_NUMBER']})
-  # puts @message
+    @account = @client.account
+    @message = @account.sms.messages.create({:from => ENV['TWILIO_FROM_NUMBER'], :to => 'user.phone_number', :body => params['Body']})
+    puts @message
+  end
 end

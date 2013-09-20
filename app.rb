@@ -76,7 +76,7 @@ delete '/users/:id' do |id|
   redirect "/users"
 end
 
-post 'sms' do
+post '/sms' do
   @users = User.all
   unless params['Body'] 
     halt 400, 'Missing "From" or "Body" in POST'

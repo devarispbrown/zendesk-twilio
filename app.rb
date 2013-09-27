@@ -92,7 +92,7 @@ post '/sms' do
     @client = Twilio::REST::Client.new(@account_sid, @auth_token)
 
     @account = @client.account
-    @message = @account.sms.messages.create({:from => ENV['TWILIO_FROM_NUMBER'], :to => 'user.phone_number', :body => "VIP User #{params['Email']} has this issue #{params['Body']}. Ticket number #{params['Id']} has a priority of #{params['Priority']}"})
+    @message = @account.sms.messages.create({:from => ENV['TWILIO_FROM_NUMBER'], :to => '+16159755675', :body => "VIP User #{params['Email']} has this issue #{params['Body']}. Ticket number #{params['Id']} has a priority of #{params['Priority']}"})
     puts @message
   end
 end

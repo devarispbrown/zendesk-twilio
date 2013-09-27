@@ -90,9 +90,11 @@ post '/sms' do
   # set up a client to talk to the Twilio REST API
   @users.each do |user|
     @client = Twilio::REST::Client.new(@account_sid, @auth_token)
-
+    $log.debug("Created Twilio Client with credentials")
     @account = @client.account
+    $log.debug(@account.inspect)
     @message = @account.sms.messages.create({:from => ENV['TWILIO_FROM_NUMBER'], :to => '+16159755675', :body => "VIP User #{params['Email']} has this issue #{params['Body']}. Ticket number #{params['Id']} has a priority of #{params['Priority']}"})
+    $log.debug(@messge.inspect)
     puts @message
   end
 end

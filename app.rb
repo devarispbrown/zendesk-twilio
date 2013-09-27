@@ -93,8 +93,10 @@ post '/sms' do
     $log.debug("Created Twilio Client with credentials")
     @account = @client.account
     $log.debug(@account.inspect)
-    @message = @account.sms.messages.create({:from => ENV['TWILIO_FROM_NUMBER'], :to => '+16159755675', :body => "VIP User #{params['Email']} has this issue with icket number #{params['Id']}."})
-    $log.debug(@messge.inspect)
+    @message = @account.sms.messages.create({:from => ENV['TWILIO_FROM_NUMBER'], :to => user.phone_number, :body => "VIP User #{params['Email']} has this issue with icket number #{params['Id']}."})
+    $log.debug(@message.inspect)
     puts @message
   end
+
+  status 200
 end

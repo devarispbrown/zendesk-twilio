@@ -3,6 +3,7 @@ require 'sinatra'
 require 'logger'
 require 'data_mapper'
 require 'json'
+require 'twilio-ruby'
 
 $stdout.sync = true
 

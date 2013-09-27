@@ -79,23 +79,25 @@ end
 
 post '/sms' do
   @users = User.all
-  unless params['Id'] and params['Email']
-    halt 400, 'Missing "Id" or "Email" in POST'
+  unless params['Id'] and params['Email'] and params['Body']
+    halt 400, 'Missing "Id", "Body" or "Email" in POST'
   end
   $log.debug("Incoming SMS POST data: #{params.inspect}")
 
   @account_sid = ENV['TWILIO_ACCOUNT_SID']
   @auth_token = ENV['TWILIO_AUTH_TOKEN']
+  @client = Twilio::REST::Client.new(@account_sid, @auth_token)
+  @account = @client.account
+
+  body_parts = []
+  body = "VIP User #{params['Email']} has this issue with ticket number #{params['Id']}. Here is the latest comment: #{params['Body']}."
+  body_parts << body.slice!(0...160) while body.size > 0
 
   # set up a client to talk to the Twilio REST API
   @users.each do |user|
-    @client = Twilio::REST::Client.new(@account_sid, @auth_token)
-    $log.debug("Created Twilio Client with credentials")
-    @account = @client.account
-    $log.debug(@account.inspect)
-    @message = @account.sms.messages.create({:from => ENV['TWILIO_FROM_NUMBER'], :to => user.phone_number, :body => "VIP User #{params['Email']} has this issue with icket number #{params['Id']}."})
-    $log.debug(@message.inspect)
-    puts @message
+    body_parts.each do |message|
+      @account.sms.messages.create({:from => ENV['TWILIO_FROM_NUMBER'], :to => user.phone_number, :body => message })
+    end
   end
 
   status 200
